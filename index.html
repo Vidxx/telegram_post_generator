@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TG Toolkit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0e0e0e;
+            color: #fff;
+            margin: 0;
+            padding: 20px
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto
+        }
+
+        textarea, button, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none
+        }
+
+        button {
+            background: #4f46e5;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer
+        }
+
+        .output {
+            background: #1c1c1c;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap
+        }
+
+        .lang {
+            float: right
+        }
+
+        .pay {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 10px
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <select class="lang" onchange="setLang(this.value)">
+            <option value="en">EN</option>
+            <option value="ru">RU</option>
+        </select>
+
+        <h1 id="title">Telegram Post Generator</h1>
+        <p id="desc">Generate posts, ads and channel descriptions.</p>
+
+<textarea id="input" placeholder="Post topic..."></textarea>
+        <button onclick="generate()">Generate</button>
+
+        <div class="output" id="output"></div>
+
+        <div class="pay" id="pay" style="display:none">
+            <p><b>Limit reached.</b></p>
+            <p>Send <b>5 TON</b> to unlock unlimited access:</p>
+            <p><code>UQCktMWFotWNm72RGmtuIZeK9CTe6kIn3jS4XLw7ELtkEkhn</code></p>
+            <p>After payment, contact admin.</p>
+        </div>
+
+    </div>
+
+    <script>
+        let limit = localStorage.getItem("limit") || 3;
+        let paid = localStorage.getItem("paid");
+
+        const texts = {
+            en: {
+                title: "Telegram Post Generator",
+                desc: "Generate posts, ads and channel descriptions.",
+                limit: "Limit reached."
+            },
+            ru: {
+                title: "Генератор постов для Telegram",
+                desc: "Создание постов, рекламы и описаний каналов.",
+                limit: "Лимит исчерпан."
+            }
+        };
+
+        let lang = "en";
+
+        function setLang(l) {
+            lang = l;
+            document.getElementById("title").innerText = texts[l].title;
+            document.getElementById("desc").innerText = texts[l].desc;
+        }
+
+        function generate() {
+            if (paid) return fakeGen();
+            if (limit <= 0) {
+                document.getElementById("pay").style.display = "block";
+                return;
+            }
+            limit--;
+            localStorage.setItem("limit", limit);
+            fakeGen();
+        }
+
+        function fakeGen() {
+            const topic = document.getElementById("input").value;
+            document.getElementById("output").innerText =
+                "🔥 " + topic + "\n\n"
+                + "— Clear hook\n"
+                + "— Value\n"
+                + "— CTA\n\n"
+                + "Subscribe for more.";
+        }
+    </script>
+
+</body>
+</html>
+
